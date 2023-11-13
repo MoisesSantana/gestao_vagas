@@ -31,6 +31,7 @@ public class CompanyEntity {
   @Length(min = 6, message = "O campo (password) deve conter no mínimo 6 caracteres.")
   private String password;
 
+  @Pattern(regexp = "^(http:\\/\\/www\\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$", message = "O campo (website) deve conter uma url válida.")
   private String website;
 
   private String name;
