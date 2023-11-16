@@ -12,13 +12,13 @@ import br.com.moisessantana.gestao_vagas.modules.candidate.dto.AuthCandidateRequ
 import br.com.moisessantana.gestao_vagas.modules.candidate.services.AuthCandidateService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/candidate")
 public class AuthCandidateController {
 
   @Autowired
   private AuthCandidateService authCandidateService;
   
-  @PostMapping("/candidate")
+  @PostMapping("/auth")
   public ResponseEntity<Object> auth(@RequestBody AuthCandidateRequestDTO authCandidateRequestDTO) {
     try {
       var token = this.authCandidateService.execute(authCandidateRequestDTO);

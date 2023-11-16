@@ -26,20 +26,21 @@ public class SecurityMiddleware extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
     
-    SecurityContextHolder.getContext().setAuthentication(null);
     String authorization = request.getHeader("Authorization");
 
-    if (authorization != null && authorization.startsWith("Bearer ")) {
-      var subjectToken = this.jwtProvider.validateToken(authorization);
-      
-      if (subjectToken.isEmpty()) {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        return;
+    if (request.getRequestURI().startsWith("/company")) {
+      if (authorization != null && authorization.startsWith("Bearer ")) {
+        var subjectToken = this.jwtProvider.validateToken(authorization);
+        
+        if (subjectToken.isEmpty()) {
+          response.setStatus(HttpStatus.UNAUTHORIZED.value());
+          return;
+        }
+  
+        request.setAttribute("company_id", subjectToken);
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
+        SecurityContextHolder.getContext().setAuthentication(auth);
       }
-
-      request.setAttribute("company_id", subjectToken);
-      UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
-      SecurityContextHolder.getContext().setAuthentication(auth);
     }
 
     filterChain.doFilter(request, response);

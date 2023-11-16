@@ -17,23 +17,25 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/company")
 public class JobController {
   
   @Autowired
   private CreateJobService createJobService;
 
-  @PostMapping()
+  @PostMapping("/job")
   public ResponseEntity<Object> create(@Valid @RequestBody CreateJobDTO createjobDTO, HttpServletRequest request) {
-    try {
-      var companyId = request.getAttribute("company_id");
+    var companyId = request.getAttribute("company_id");
 
-      var jobEntity = JobEntity.builder()
-        .benefits(createjobDTO.getBenefits())
-        .description(createjobDTO.getDescription())
-        .level(createjobDTO.getLevel())
-        .companyId(UUID.fromString(companyId.toString()))
-        .build();
+
+    var jobEntity = JobEntity.builder()
+      .benefits(createjobDTO.getBenefits())
+      .description(createjobDTO.getDescription())
+      .level(createjobDTO.getLevel())
+      .companyId(UUID.fromString(companyId.toString()))
+      .build();
+
+    try {
 
       var result = this.createJobService.execute(jobEntity);
       return ResponseEntity.status(HttpStatus.CREATED).body(result);
