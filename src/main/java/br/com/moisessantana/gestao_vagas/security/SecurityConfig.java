@@ -20,6 +20,22 @@ public class SecurityConfig {
   @Autowired
   private SecurityCandidateMiddleware securityCandidateMiddleware;
   
+  private static final String[] SWAGGER_LIST = {
+    "/swagger-ui/**",
+    "/swagger-ui.html",
+    "/v3/api-docs/**",
+    "/swagger-ui/**",
+    "/swagger-ui/**/**",
+    "/swagger-ui/**/**/**",
+    "/swagger-ui/**/**/**/**",
+    "/swagger-ui/**/**/**/**/**",
+    "/swagger-ui/**/**/**/**/**/**",
+    "/swagger-ui/**/**/**/**/**/**/**",
+    "/swagger-ui/**/**/**/**/**/**/**/**",
+    "/swagger-ui/**/**/**/**/**/**/**/**/**",
+    "/sw"
+  };
+
   @Bean
   SecurityFilterChain SecurityFilterChain(HttpSecurity http) throws Exception {
     http.csrf(csrf -> csrf.disable())
@@ -27,7 +43,8 @@ public class SecurityConfig {
         auth.requestMatchers("/candidate").permitAll()
           .requestMatchers("/candidate/auth").permitAll()
           .requestMatchers("/company").permitAll()
-          .requestMatchers("/company/auth").permitAll();
+          .requestMatchers("/company/auth").permitAll()
+          .requestMatchers(SWAGGER_LIST).permitAll();
         auth.anyRequest().authenticated();
       })
       .addFilterBefore(securityCandidateMiddleware, BasicAuthenticationFilter.class)
